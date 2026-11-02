@@ -3,7 +3,7 @@ pub const ID: &str = "appleskin";
 #[allow(dead_code)]
 pub const NAME: &str = "AppleSkin";
 #[allow(dead_code)]
-pub const VERSION: &str = "0.1.1";
+pub const VERSION: &str = "0.1.2";
 #[allow(dead_code)]
 pub const DESCRIPTION: &str = "Saturation, exhaustion and the food in your hand, drawn over the food bar as the original AppleSkin does.";
 
@@ -38,6 +38,7 @@ pub enum Animation {
 impl Animation {
     pub fn for_code(code: &str) -> Self {
         match code {
+            "fade" => Self::Fade,
             "pulse" => Self::Pulse,
             "both" => Self::Both,
             _ => Self::Both,
@@ -365,7 +366,16 @@ mod tests {
 
     #[test]
     fn animation_cycles_and_round_trips_its_key() {
-        assert_eq!(Animation::for_code(Animation::Pulse.code()), Animation::Pulse);
+        for a in [Animation::Fade, Animation::Pulse, Animation::Both] {
+            assert_eq!(Animation::for_code(a.code()), a);
+        }
+        let mut a = Animation::Both;
+        let mut seen = Vec::new();
+        for _ in 0..3 {
+            a = Animation::for_code(a.next().code());
+            seen.push(a);
+        }
+        assert_eq!(seen, vec![Animation::Fade, Animation::Pulse, Animation::Both]);
         assert_eq!(Animation::for_code("nonsense"), Animation::Both);
         assert_eq!(Animation::Fade.next().next().next(), Animation::Fade);
     }
