@@ -30,13 +30,16 @@ file = "crates/horizon-client/src/game.rs"
 name = "official_appleskin_bar"
 source = "bar.rs"
 
+# After the health, armor, food and air rows (`gui_layer_post` for the
+# `minecraft:player_health` layer), so the overlay draws right over the food bar.
 [[injection]]
 id = "hud"
 kind = "HEAD"
-target = "horizon_client::game::titles::Game<'_>::draw_overlay_message"
+target = "horizon_client::game::native_hooks::Game<'_>::native_gui_layer_post"
 helper = "hud.rs"
 bindings = [
-  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+  { name = "game", ty = "&crate::game::Game<'_>", value = "&*self" },
+  { name = "layer", ty = "&str", value = "layer" },
   { name = "batch", ty = "&mut horizon_client::hud::HudBatch", value = "&mut *batch" },
 ]
 

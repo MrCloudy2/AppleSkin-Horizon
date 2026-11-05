@@ -18,6 +18,12 @@ Draws the hunger details that AppleSkin shows over the food bar:
 
 Each part can be switched on or off, and the animation can be changed, in the native mod settings.
 
+## Compatibility
+
+AppleSkin draws right after Horizon's health, armor, food and air rows, through the native hook point
+`native_gui_layer_post` (the `minecraft:player_health` layer), so it needs Horizon's hook API 139 or later
+(`"hooks": 139`). Tested on Horizon Nightly 2026-11-05 (`f319701`) with horizon-mixins `e8cd0aa`.
+
 ## Build
 
 ```sh
